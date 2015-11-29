@@ -18,48 +18,157 @@ namespace KoWordSearch
 	/// </summary>
 	public partial class MainForm : Form
 	{
+		#region  [ Members ]
+		
+		private BindingSource m_MatrixBs = new BindingSource();
+		private DataTable m_MatrixTbl = new DataTable("MatrixTbl");
+		
+		private BindingSource m_VocabBs = new BindingSource();
+		private DataTable m_VocabTbl = new DataTable("VocabTbl");
+		private string m_VocabFile = Application.StartupPath + @"\Vocabulary\Vocab-0001.txt";
+		private const string VOC_KOWORD = "KoWord";
+		private const string VOC_KOWORDLEN = "KoWordLen";
+		private const string VOC_ENWORD = "EnWord";
+		private const string VOC_ENWORDLEN = "EnWordLen";
+		private const string VOC_ORIENT = "Orient";
+		private const string VOC_X = "X";
+		private const string VOC_Y = "Y";
+				
+		private const string CRLF = "\x000d\x000a";
+		private Random m_Ran = new Random(0);
+		private int m_TriesMaximum = 10000;
+			
+		/// <summary>
+		/// Configuration Parameters
+		/// </summary>
+		private string CONFIG_FILE = Application.StartupPath + @"\" + "config.ini";
+		private const string CFG_VOCABULARY_FILE = "Vocabulary_File";
+		private const string CFG_MATRIX_ROWS = "Matrix_Rows";
+		private const string CFG_MATRIX_COLS = "Matrix_Cols";
+		private const string CFG_TRIES_MAXIMUM = "Tries_Maximum";
+		#endregion
+
+
+		#region [ Constructor / Destructor ]
+
 		public MainForm()
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			m_VocabTbl.Columns.Add(new DataColumn("KoWord", typeof(string)));
-			m_VocabTbl.Columns.Add(new DataColumn("KoWordLen", typeof(int)));
-			m_VocabTbl.Columns.Add(new DataColumn("EnWord", typeof(string)));
-			m_VocabTbl.Columns.Add(new DataColumn("EnWordLen", typeof(int)));
-			m_VocabTbl.Columns.Add(new DataColumn("Orient", typeof(bool)));
-			m_VocabTbl.Columns.Add(new DataColumn("X", typeof(int)));
-			m_VocabTbl.Columns["X"].DefaultValue = 0;
-			m_VocabTbl.Columns.Add(new DataColumn("Y", typeof(int)));
-			m_VocabTbl.Columns["Y"].DefaultValue = 0;
+
+			m_VocabTbl.Columns.Add(new DataColumn(VOC_KOWORD, typeof(string)));
+			m_VocabTbl.Columns.Add(new DataColumn(VOC_KOWORDLEN, typeof(int)));
+			m_VocabTbl.Columns.Add(new DataColumn(VOC_ENWORD, typeof(string)));
+			m_VocabTbl.Columns.Add(new DataColumn(VOC_ENWORDLEN, typeof(int)));
+			m_VocabTbl.Columns.Add(new DataColumn(VOC_ORIENT, typeof(bool)));
+			m_VocabTbl.Columns.Add(new DataColumn(VOC_X, typeof(int)));
+			m_VocabTbl.Columns[VOC_X].DefaultValue = 0;
+			m_VocabTbl.Columns.Add(new DataColumn(VOC_Y, typeof(int)));
+			m_VocabTbl.Columns[VOC_Y].DefaultValue = 0;
+			
+			ConfigLoad();
 		}
-
-
-		BindingSource m_MatrixBs = new BindingSource();
-		DataTable m_MatrixTbl = new DataTable("MatrixTbl");
 		
-		BindingSource m_VocabBs = new BindingSource();
-		DataTable m_VocabTbl = new DataTable("VocabTbl");
 		
-		void QuitMnuClick(object sender, EventArgs e)
+		private void QuitMnuClick(object sender, EventArgs e)
 		{
 			this.Close();
 		}
+
+		#endregion
 		
+
+		#region  [ Methods ]
 		
-		void ColumnsNudValueChanged(object sender, EventArgs e)
+		private void ConfigLoad()
+		{
+			bool isIniLoaded = false;
+			if (File.Exists(CONFIG_FILE))
+			{
+				try
+				{
+					string[] inis = File.ReadAllLines(CONFIG_FILE);
+					foreach (string ini in inis)
+					{
+						string[] lrs = ini.Split("=".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+						if (lrs.Length > 1)
+						{
+							if (lrs[0].Trim() == CFG_VOCABULARY_FILE)
+							{
+								m_VocabFile = lrs[1].Trim();
+								if (m_VocabFile.Length > 0)
+								{
+									VocabLoad();
+								}
+							}
+							if (lrs[0].Trim() == CFG_MATRIX_COLS)
+							{
+								try
+								{
+								  int cols = Convert.ToInt32(lrs[1].Trim());
+								  this.MatrixColsNud.Value = cols;
+								}
+								catch 
+								{
+									// default per design mode
+								}
+							}
+							if (lrs[0].Trim() == CFG_MATRIX_ROWS)
+							{
+								try
+								{
+									int rows = Convert.ToInt32(lrs[1].Trim());
+									this.MatrixRowsNud.Value = rows;
+								}
+								catch
+								{
+									// default per design mode
+								}
+							}
+							if (lrs[0].Trim() == CFG_TRIES_MAXIMUM)
+							{
+								try
+								{
+									int tries = Convert.ToInt32(lrs[1].Trim());
+									m_TriesMaximum = tries;
+								}
+								catch
+								{
+									// default per design mode
+								}
+							}
+						}
+					}
+					isIniLoaded = true;
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show("Error Loading Configuration File" + CRLF + ex.Message, "Load Configuration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+			
+			if (!isIniLoaded)
+			{
+				// Initialize a new Configuration file
+				ConfigSave();
+			}
+		}
+		
+	
+		private void ColumnsNudValueChanged(object sender, EventArgs e)
 		{
 			ColumnsBuild();
 		}
 		
 		
-		void ColumnsBuild()
+		private void ColumnsBuild()
 		{
 			m_MatrixBs.DataSource = null;
 			m_MatrixTbl.Columns.Clear();
 			this.MatrixDgv.Columns.Clear();
-			for (int cc = 0; cc < this.ColumnsNud.Value; cc++)
+			for (int cc = 0; cc < this.MatrixColsNud.Value; cc++)
 			{
 				string colName = "X" + cc.ToString("00");
 				m_MatrixTbl.Columns.Add(new DataColumn(colName, typeof(string)));
@@ -73,11 +182,11 @@ namespace KoWordSearch
 		}
 		
 		
-		void RowsBuild()
+		private void RowsBuild()
 		{
 			m_MatrixTbl.Rows.Clear();
 			m_MatrixTbl.AcceptChanges();
-			for (int rr = 0; rr < this.RowsNud.Value; rr++)
+			for (int rr = 0; rr < this.MatrixRowsNud.Value; rr++)
 			{
 				DataRow dr = m_MatrixTbl.NewRow();
 				m_MatrixTbl.Rows.Add(dr);
@@ -86,31 +195,53 @@ namespace KoWordSearch
 		}
 
 		
-		void RowsNudValueChanged(object sender, EventArgs e)
+		private void RowsNudValueChanged(object sender, EventArgs e)
 		{
 			RowsBuild();
 		}
 		
 		
-		void SaveMnuClick(object sender, EventArgs e)
+		private void ConfigSave()
 		{
-	
+			StringBuilder sb = new StringBuilder("[Vocabulary]" + CRLF);
+			sb.Append(CFG_VOCABULARY_FILE + "=" + Application.StartupPath + @"\Vocabulary\Vocab-0001.txt" + CRLF);
+			sb.Append("[Matrix]");
+			sb.Append(CFG_MATRIX_COLS + "=" + this.MatrixColsNud.Value.ToString() + CRLF);
+			sb.Append(CFG_MATRIX_ROWS + "=" + this.MatrixRowsNud.Value.ToString() + CRLF);
+			sb.Append(CFG_TRIES_MAXIMUM + "=" + m_TriesMaximum.ToString() + CRLF);
+			if (File.Exists(CONFIG_FILE))
+			{
+			File.Delete(CONFIG_FILE);
+			}
+			File.WriteAllText(CONFIG_FILE, sb.ToString());				
 		}
 		
 		
-		Random ran = new Random(0);
-		
-		string HangulRandom()
+		private void SaveMnuClick(object sender, EventArgs e)
 		{
-			return ((char)ran.Next(0xAC00, 0xD7A4)).ToString();
+			ConfigSave();
+		}
+		
+		
+		
+		/// <summary>
+		/// Selects a Random Hangul Sylable from the Unicode Characters
+		/// </summary>
+		/// <returns></returns>
+		private string HangulRandom()
+		{
+			return ((char)m_Ran.Next(0xAC00, 0xD7A4)).ToString();
 		}
 	
 		
-		void VocabLoad()
+		private void VocabLoad()
 		{
 			m_VocabTbl.Rows.Clear();
-			
-			string[] vocablines = File.ReadAllLines(Application.StartupPath + @"\Vocab.txt");			
+			if (!File.Exists(m_VocabFile))
+			{
+				return;
+			}
+			string[] vocablines = File.ReadAllLines(m_VocabFile);			
 			foreach (string vocab in vocablines)
 			{
 				if (vocab.Trim().Length == 0)
@@ -121,55 +252,94 @@ namespace KoWordSearch
 				string[] voWord = vocab.Split(",".ToCharArray());
 				
 				DataRow dr = m_VocabTbl.NewRow();
-				dr["KoWord"] = voWord[0].Trim();
-				dr["KoWordLen"] = voWord[0].Trim().Length;
+				dr[VOC_KOWORD] = voWord[0].Trim();
+				dr[VOC_KOWORDLEN] = voWord[0].Trim().Length;
 				
-				dr["EnWord"] = voWord[1].Trim();
-				dr["EnWordLen"] = voWord[1].Trim().Length;
-				dr["X"] = 0;
-				dr["Y"] = 0;
-				if (ran.Next(0, 2) == 0)
+				dr[VOC_ENWORD] = voWord[1].Trim();
+				dr[VOC_ENWORDLEN] = voWord[1].Trim().Length;
+				dr[VOC_X] = 0;
+				dr[VOC_Y] = 0;
+				if (m_Ran.Next(0, 2) == 0)
 				{
-					dr["Orient"] = true;
+					dr[VOC_ORIENT] = true;
 				}
 				else
 				{
-					dr["Orient"] = false;
+					dr[VOC_ORIENT] = false;
 				}
 				m_VocabTbl.Rows.Add(dr);
 			}
 			m_VocabTbl.AcceptChanges();
 			m_VocabBs.DataSource = m_VocabTbl.DefaultView;
 			this.VocabDgv.DataSource = m_VocabBs;
+			int iMatrixMinimum = MatrixMinimum();
+			this.StatusLb.Text = "Vocabulary Loaded.  Minimum Matrix Size = " + iMatrixMinimum.ToString() + " x " + iMatrixMinimum.ToString();
 		}
 
 		
-		void VocabLayout()
+		/// <summary>
+		/// Determines the minimum size for the matrix based on the vocabulary
+		/// The minimum size is the longest vocabulary word's length
+		/// </summary>
+		/// <returns></returns>
+		private int MatrixMinimum()
+		{
+			int iMaxWordLength = 0;
+			foreach (DataRowView drv in m_VocabTbl.DefaultView)
+			{
+				if (Convert.ToInt32(drv[VOC_KOWORDLEN]) > iMaxWordLength)
+				{
+					iMaxWordLength = Convert.ToInt32(drv[VOC_KOWORDLEN]);
+				}
+			}
+			return iMaxWordLength;
+		}
+		
+		
+		private void VocabLayout()
 		{
 			ColumnsBuild();
-			RowsBuild();			
+			RowsBuild();	
+
+     		int iTries = 0;
+     		int iGaveUp = 0;
+     		string sPrefix = "";
+     		
 			for (int ii = 0; ii < m_VocabTbl.DefaultView.Count; ii++)
 			{
+				sPrefix = m_VocabTbl.DefaultView[ii][VOC_KOWORD].ToString() + " -> ";
 				m_VocabTbl.DefaultView[ii].BeginEdit();
-				if (Convert.ToBoolean(m_VocabTbl.DefaultView[ii]["Orient"]) == true)
+				iTries = 0;
+				if (Convert.ToBoolean(m_VocabTbl.DefaultView[ii][VOC_ORIENT]) == true)
 				{
 					// Horizontal
 					bool placed = false;
 					while (!placed)
 					{
+						iTries++;
+						if (iTries > m_TriesMaximum)
+						{
+							iGaveUp++;
+							break;
+						}
+						this.StatusLb.Text = sPrefix + iTries.ToString();
+						this.statusStrip1.Refresh();
+						
 						// select a random row
-						int rowRan = ran.Next(0, Convert.ToInt32(this.RowsNud.Value));
+						int rowRan = m_Ran.Next(0, Convert.ToInt32(this.MatrixRowsNud.Value));
+						
 						// select a random column that allows the word to fit.
-						int colRan = ran.Next(0, Convert.ToInt32(Convert.ToInt32(this.ColumnsNud.Value) - Convert.ToInt32(m_VocabTbl.DefaultView[ii]["KoWordLen"])));
+						int colRan = m_Ran.Next(0, Convert.ToInt32(Convert.ToInt32(this.MatrixColsNud.Value) - Convert.ToInt32(m_VocabTbl.DefaultView[ii][VOC_KOWORDLEN])) + 1);
+						
 						// Test for collision
-						for (int xx = 0; xx < Convert.ToInt32(m_VocabTbl.DefaultView[ii]["KoWordLen"]); xx++)
+						for (int xx = 0; xx < Convert.ToInt32(m_VocabTbl.DefaultView[ii][VOC_KOWORDLEN]); xx++)
 						{
 							if ((m_MatrixTbl.DefaultView[rowRan][colRan + xx].ToString().Length == 0)
-							    || (m_MatrixTbl.DefaultView[rowRan][colRan + xx].ToString() == m_VocabTbl.DefaultView[ii]["KoWord"].ToString()[xx].ToString()))
+							    || (m_MatrixTbl.DefaultView[rowRan][colRan + xx].ToString() == m_VocabTbl.DefaultView[ii][VOC_KOWORD].ToString()[xx].ToString()))
 							{
 								// cell is either empty or contains the same letter that we want to put there
 								// no collision
-								if (xx == (Convert.ToInt32(m_VocabTbl.DefaultView[ii]["KoWordLen"]) - 1))
+								if (xx == (Convert.ToInt32(m_VocabTbl.DefaultView[ii][VOC_KOWORDLEN]) - 1))
 								{
 									placed = true;
 								}
@@ -183,12 +353,12 @@ namespace KoWordSearch
 						
 						if (placed)
 						{
-							for (int xx = 0; xx < Convert.ToInt32(m_VocabTbl.DefaultView[ii]["KoWordLen"]); xx++)
+							for (int xx = 0; xx < Convert.ToInt32(m_VocabTbl.DefaultView[ii][VOC_KOWORDLEN]); xx++)
 							{
-     							m_VocabTbl.DefaultView[ii]["X"] = colRan;
-								m_VocabTbl.DefaultView[ii]["Y"] = rowRan;
+     							m_VocabTbl.DefaultView[ii][VOC_X] = colRan;
+								m_VocabTbl.DefaultView[ii][VOC_Y] = rowRan;
 								m_MatrixTbl.DefaultView[rowRan].BeginEdit();
-								m_MatrixTbl.DefaultView[rowRan][colRan + xx] = m_VocabTbl.DefaultView[ii]["KoWord"].ToString()[xx];
+								m_MatrixTbl.DefaultView[rowRan][colRan + xx] = m_VocabTbl.DefaultView[ii][VOC_KOWORD].ToString()[xx];
 								m_MatrixTbl.DefaultView[rowRan].EndEdit();
 							}
 							m_MatrixTbl.AcceptChanges();
@@ -201,19 +371,30 @@ namespace KoWordSearch
 					bool placed = false;
 					while (!placed)
 					{
+						iTries++;
+						if (iTries > m_TriesMaximum)
+						{
+							iGaveUp++;
+							break;
+						}
+						this.StatusLb.Text = sPrefix + iTries.ToString();
+						this.statusStrip1.Refresh();
+
 						// select a random row that will allow the word to fit vertically
-						int rowRan = ran.Next(0, Convert.ToInt32(this.RowsNud.Value) - Convert.ToInt32(m_VocabTbl.DefaultView[ii]["KoWordLen"]));
+						int rowRan = m_Ran.Next(0, Convert.ToInt32(this.MatrixRowsNud.Value) - Convert.ToInt32(m_VocabTbl.DefaultView[ii][VOC_KOWORDLEN]));
+						
 						// select a random column
-						int colRan = ran.Next(0, Convert.ToInt32(this.ColumnsNud.Value));
+						int colRan = m_Ran.Next(0, Convert.ToInt32(this.MatrixColsNud.Value));
+						
 						// Test for collision
-						for (int yy = 0; yy < Convert.ToInt32(m_VocabTbl.DefaultView[ii]["KoWordLen"]); yy++)
+						for (int yy = 0; yy < Convert.ToInt32(m_VocabTbl.DefaultView[ii][VOC_KOWORDLEN]); yy++)
 						{
 							if ((m_MatrixTbl.DefaultView[rowRan + yy][colRan].ToString().Length == 0)
-							    || (m_MatrixTbl.DefaultView[rowRan + yy][colRan].ToString() == m_VocabTbl.DefaultView[ii]["KoWord"].ToString()[yy].ToString()))
+							    || (m_MatrixTbl.DefaultView[rowRan + yy][colRan].ToString() == m_VocabTbl.DefaultView[ii][VOC_KOWORD].ToString()[yy].ToString()))
 							{
 								// cell is either empty or contains the same letter that we want to put there
 								// no collision
-								if (yy == (Convert.ToInt32(m_VocabTbl.DefaultView[ii]["KoWordLen"]) - 1))
+								if (yy == (Convert.ToInt32(m_VocabTbl.DefaultView[ii][VOC_KOWORDLEN]) - 1))
 								{
 									placed = true;
 								}
@@ -227,12 +408,12 @@ namespace KoWordSearch
 						
 						if (placed)
 						{
-							for (int yy = 0; yy < Convert.ToInt32(m_VocabTbl.DefaultView[ii]["KoWordLen"]); yy++)
+							for (int yy = 0; yy < Convert.ToInt32(m_VocabTbl.DefaultView[ii][VOC_KOWORDLEN]); yy++)
 							{
-								m_VocabTbl.DefaultView[ii]["X"] = colRan;
-								m_VocabTbl.DefaultView[ii]["Y"] = rowRan;
+								m_VocabTbl.DefaultView[ii][VOC_X] = colRan;
+								m_VocabTbl.DefaultView[ii][VOC_Y] = rowRan;
 								m_MatrixTbl.DefaultView[rowRan].BeginEdit();
-								m_MatrixTbl.DefaultView[rowRan + yy][colRan] = m_VocabTbl.DefaultView[ii]["KoWord"].ToString()[yy];
+								m_MatrixTbl.DefaultView[rowRan + yy][colRan] = m_VocabTbl.DefaultView[ii][VOC_KOWORD].ToString()[yy];
 								m_MatrixTbl.DefaultView[rowRan].EndEdit();
 							}
 							m_MatrixTbl.AcceptChanges();
@@ -241,10 +422,19 @@ namespace KoWordSearch
 				}
 				m_VocabTbl.DefaultView[ii].EndEdit();
 			}
+			if (iGaveUp > 0)
+			{
+				this.StatusLb.Text = sPrefix + "I gave up trying to place " + iGaveUp.ToString() + " words!";
+			}
+			else
+			{
+				this.StatusLb.Text = "Done = " + iTries.ToString() + " tries";
+				this.statusStrip1.Refresh();			
+			}
 		}
 		
 		
-		void RunTBtnClick(object sender, EventArgs e)
+		private void RunTBtnClick(object sender, EventArgs e)
 		{
 			//VocabLoad();
 			//VocabLayout();
@@ -272,8 +462,33 @@ namespace KoWordSearch
 		}
 		
 		
+		/// <summary>
+		/// Displays the File Open Dialog for the User to select a Vocabulary file.
+		/// If selected, then loads the file into the vocabulary table
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void LoadVocabFileMnuClick(object sender, EventArgs e)
+		{
+			OpenFileDialog ofDlg = new OpenFileDialog();
+			ofDlg.DefaultExt = "txt";
+			ofDlg.InitialDirectory = Path.GetDirectoryName(m_VocabFile);
+			try
+			{
+				if (ofDlg.ShowDialog() == DialogResult.OK)
+				{
+					m_VocabFile = ofDlg.FileName;
+					VocabLoad();
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error Loading Vocabulary File" + CRLF + ex.Message, "Load Vocabulary Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			ofDlg.Dispose();			
+		}
 		
-		
-		
+		#endregion
+				
 	}
 }

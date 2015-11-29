@@ -1,0 +1,17 @@
+﻿고양이, cat
+개, dog
+돼지, pig
+말, horse
+맛있다, delicious
+믈고기, fish
+매달리다, hang
+부모님, parents
+소매, sleeve
+시계, clock
+신, god
+수학, mathematics
+행성, planet
+양, sheep
+양식, western food
+우주선, spaceship
+은하계, galaxy

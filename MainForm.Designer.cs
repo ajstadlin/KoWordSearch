@@ -18,7 +18,7 @@ namespace KoWordSearch
 		private System.Windows.Forms.ToolStripMenuItem FileMenu;
 		private System.Windows.Forms.ToolStripMenuItem QuitMnu;
 		private System.Windows.Forms.StatusStrip statusStrip1;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.Windows.Forms.ToolStripStatusLabel StatusLb;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton RunTBtn;
@@ -32,9 +32,9 @@ namespace KoWordSearch
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-		private System.Windows.Forms.NumericUpDown RowsNud;
+		private System.Windows.Forms.NumericUpDown MatrixRowsNud;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.NumericUpDown ColumnsNud;
+		private System.Windows.Forms.NumericUpDown MatrixColsNud;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ToolStripMenuItem SaveMnu;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -43,6 +43,7 @@ namespace KoWordSearch
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
 		private System.Windows.Forms.ToolStripButton PreviewTBtn;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripMenuItem LoadVocabFileMnu;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -69,12 +70,15 @@ namespace KoWordSearch
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveMnu = new System.Windows.Forms.ToolStripMenuItem();
+			this.LoadVocabFileMnu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.QuitMnu = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.StatusLb = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.PreviewTBtn = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.RunTBtn = new System.Windows.Forms.ToolStripButton();
 			this.MainTabs = new System.Windows.Forms.TabControl();
 			this.MatrixTab = new System.Windows.Forms.TabPage();
@@ -89,12 +93,10 @@ namespace KoWordSearch
 			this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.RowsNud = new System.Windows.Forms.NumericUpDown();
+			this.MatrixRowsNud = new System.Windows.Forms.NumericUpDown();
 			this.label2 = new System.Windows.Forms.Label();
-			this.ColumnsNud = new System.Windows.Forms.NumericUpDown();
+			this.MatrixColsNud = new System.Windows.Forms.NumericUpDown();
 			this.label1 = new System.Windows.Forms.Label();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.PreviewTBtn = new System.Windows.Forms.ToolStripButton();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -107,8 +109,8 @@ namespace KoWordSearch
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.VocabDgv)).BeginInit();
 			this.groupBox1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.RowsNud)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.ColumnsNud)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.MatrixRowsNud)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.MatrixColsNud)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -126,6 +128,7 @@ namespace KoWordSearch
 			// 
 			this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.SaveMnu,
+			this.LoadVocabFileMnu,
 			this.toolStripSeparator1,
 			this.QuitMnu});
 			this.FileMenu.Name = "FileMenu";
@@ -135,26 +138,33 @@ namespace KoWordSearch
 			// SaveMnu
 			// 
 			this.SaveMnu.Name = "SaveMnu";
-			this.SaveMnu.Size = new System.Drawing.Size(98, 22);
+			this.SaveMnu.Size = new System.Drawing.Size(182, 22);
 			this.SaveMnu.Text = "&Save";
 			this.SaveMnu.Click += new System.EventHandler(this.SaveMnuClick);
+			// 
+			// LoadVocabFileMnu
+			// 
+			this.LoadVocabFileMnu.Name = "LoadVocabFileMnu";
+			this.LoadVocabFileMnu.Size = new System.Drawing.Size(182, 22);
+			this.LoadVocabFileMnu.Text = "Load &Vocabulary File";
+			this.LoadVocabFileMnu.Click += new System.EventHandler(this.LoadVocabFileMnuClick);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(95, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(179, 6);
 			// 
 			// QuitMnu
 			// 
 			this.QuitMnu.Name = "QuitMnu";
-			this.QuitMnu.Size = new System.Drawing.Size(98, 22);
+			this.QuitMnu.Size = new System.Drawing.Size(182, 22);
 			this.QuitMnu.Text = "&Quit";
 			this.QuitMnu.Click += new System.EventHandler(this.QuitMnuClick);
 			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripStatusLabel1});
+			this.StatusLb});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 606);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
@@ -162,12 +172,12 @@ namespace KoWordSearch
 			this.statusStrip1.TabIndex = 1;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
-			// toolStripStatusLabel1
+			// StatusLb
 			// 
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(936, 17);
-			this.toolStripStatusLabel1.Spring = true;
-			this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.StatusLb.Name = "StatusLb";
+			this.StatusLb.Size = new System.Drawing.Size(905, 17);
+			this.StatusLb.Spring = true;
+			this.StatusLb.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// panel1
 			// 
@@ -190,6 +200,20 @@ namespace KoWordSearch
 			this.toolStrip1.Size = new System.Drawing.Size(953, 25);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
+			// 
+			// PreviewTBtn
+			// 
+			this.PreviewTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.PreviewTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.PreviewTBtn.Name = "PreviewTBtn";
+			this.PreviewTBtn.Size = new System.Drawing.Size(52, 22);
+			this.PreviewTBtn.Text = "Pre&view";
+			this.PreviewTBtn.Click += new System.EventHandler(this.PreviewTBtnClick);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
 			// RunTBtn
 			// 
@@ -226,7 +250,7 @@ namespace KoWordSearch
 			// 
 			this.groupBox2.Controls.Add(this.MatrixDgv);
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox2.Font = new System.Drawing.Font("Batang", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox2.Location = new System.Drawing.Point(3, 3);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(939, 523);
@@ -242,11 +266,11 @@ namespace KoWordSearch
 			this.MatrixDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.MatrixDgv.ColumnHeadersVisible = false;
 			this.MatrixDgv.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.MatrixDgv.Location = new System.Drawing.Point(3, 28);
+			this.MatrixDgv.Location = new System.Drawing.Point(3, 27);
 			this.MatrixDgv.Name = "MatrixDgv";
 			this.MatrixDgv.RowHeadersVisible = false;
 			this.MatrixDgv.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(8);
-			this.MatrixDgv.Size = new System.Drawing.Size(933, 492);
+			this.MatrixDgv.Size = new System.Drawing.Size(933, 493);
 			this.MatrixDgv.TabIndex = 0;
 			// 
 			// VocabTab
@@ -331,9 +355,9 @@ namespace KoWordSearch
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.RowsNud);
+			this.groupBox1.Controls.Add(this.MatrixRowsNud);
 			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Controls.Add(this.ColumnsNud);
+			this.groupBox1.Controls.Add(this.MatrixColsNud);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.groupBox1.Location = new System.Drawing.Point(3, 3);
@@ -342,19 +366,19 @@ namespace KoWordSearch
 			this.groupBox1.TabIndex = 8;
 			this.groupBox1.TabStop = false;
 			// 
-			// RowsNud
+			// MatrixRowsNud
 			// 
-			this.RowsNud.Location = new System.Drawing.Point(92, 48);
-			this.RowsNud.Name = "RowsNud";
-			this.RowsNud.Size = new System.Drawing.Size(57, 21);
-			this.RowsNud.TabIndex = 4;
-			this.RowsNud.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.RowsNud.Value = new decimal(new int[] {
+			this.MatrixRowsNud.Location = new System.Drawing.Point(92, 48);
+			this.MatrixRowsNud.Name = "MatrixRowsNud";
+			this.MatrixRowsNud.Size = new System.Drawing.Size(57, 21);
+			this.MatrixRowsNud.TabIndex = 4;
+			this.MatrixRowsNud.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.MatrixRowsNud.Value = new decimal(new int[] {
 			16,
 			0,
 			0,
 			0});
-			this.RowsNud.ValueChanged += new System.EventHandler(this.RowsNudValueChanged);
+			this.MatrixRowsNud.ValueChanged += new System.EventHandler(this.RowsNudValueChanged);
 			// 
 			// label2
 			// 
@@ -365,19 +389,19 @@ namespace KoWordSearch
 			this.label2.Text = "Rows";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// ColumnsNud
+			// MatrixColsNud
 			// 
-			this.ColumnsNud.Location = new System.Drawing.Point(92, 20);
-			this.ColumnsNud.Name = "ColumnsNud";
-			this.ColumnsNud.Size = new System.Drawing.Size(57, 21);
-			this.ColumnsNud.TabIndex = 2;
-			this.ColumnsNud.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.ColumnsNud.Value = new decimal(new int[] {
+			this.MatrixColsNud.Location = new System.Drawing.Point(92, 20);
+			this.MatrixColsNud.Name = "MatrixColsNud";
+			this.MatrixColsNud.Size = new System.Drawing.Size(57, 21);
+			this.MatrixColsNud.TabIndex = 2;
+			this.MatrixColsNud.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.MatrixColsNud.Value = new decimal(new int[] {
 			16,
 			0,
 			0,
 			0});
-			this.ColumnsNud.ValueChanged += new System.EventHandler(this.ColumnsNudValueChanged);
+			this.MatrixColsNud.ValueChanged += new System.EventHandler(this.ColumnsNudValueChanged);
 			// 
 			// label1
 			// 
@@ -387,20 +411,6 @@ namespace KoWordSearch
 			this.label1.TabIndex = 1;
 			this.label1.Text = "Columns";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-			// 
-			// PreviewTBtn
-			// 
-			this.PreviewTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.PreviewTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.PreviewTBtn.Name = "PreviewTBtn";
-			this.PreviewTBtn.Size = new System.Drawing.Size(52, 22);
-			this.PreviewTBtn.Text = "Pre&view";
-			this.PreviewTBtn.Click += new System.EventHandler(this.PreviewTBtnClick);
 			// 
 			// MainForm
 			// 
@@ -431,8 +441,8 @@ namespace KoWordSearch
 			this.groupBox3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.VocabDgv)).EndInit();
 			this.groupBox1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.RowsNud)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.ColumnsNud)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.MatrixRowsNud)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.MatrixColsNud)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
