@@ -30,13 +30,7 @@
         /// </summary>
         private void InitializeComponent()
 		{
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.SaveMnu = new System.Windows.Forms.ToolStripMenuItem();
-            this.LoadVocabFileMnu = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.QuitMnu = new System.Windows.Forms.ToolStripMenuItem();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLb = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -46,6 +40,9 @@
             this.RunTBtn = new System.Windows.Forms.ToolStripButton();
             this.MainTabs = new System.Windows.Forms.TabControl();
             this.MatrixTab = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.MatrixDgv = new System.Windows.Forms.DataGridView();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel2 = new System.Windows.Forms.Panel();
             this.VocabListBox = new System.Windows.Forms.CheckedListBox();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -54,26 +51,28 @@
             this.VocabTab = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.VocabDgv = new System.Windows.Forms.DataGridView();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.MatrixRowsNud = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.MatrixColsNud = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
             this.Column6 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.splitter1 = new System.Windows.Forms.Splitter();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.MatrixDgv = new System.Windows.Forms.DataGridView();
-            this.menuStrip1.SuspendLayout();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.MatrixRowsNud = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.MatrixColsNud = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.SaveTBtn = new System.Windows.Forms.ToolStripButton();
+            this.OpenTBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.MainTabs.SuspendLayout();
             this.MatrixTab.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MatrixDgv)).BeginInit();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.VocabTab.SuspendLayout();
@@ -82,57 +81,7 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MatrixRowsNud)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MatrixColsNud)).BeginInit();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MatrixDgv)).BeginInit();
             this.SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FileMenu});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1075, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // FileMenu
-            // 
-            this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SaveMnu,
-            this.LoadVocabFileMnu,
-            this.toolStripSeparator1,
-            this.QuitMnu});
-            this.FileMenu.Name = "FileMenu";
-            this.FileMenu.Size = new System.Drawing.Size(37, 20);
-            this.FileMenu.Text = "&File";
-            // 
-            // SaveMnu
-            // 
-            this.SaveMnu.Name = "SaveMnu";
-            this.SaveMnu.Size = new System.Drawing.Size(182, 22);
-            this.SaveMnu.Text = "&Save";
-            this.SaveMnu.Click += new System.EventHandler(this.SaveMnuClick);
-            // 
-            // LoadVocabFileMnu
-            // 
-            this.LoadVocabFileMnu.Name = "LoadVocabFileMnu";
-            this.LoadVocabFileMnu.Size = new System.Drawing.Size(182, 22);
-            this.LoadVocabFileMnu.Text = "Load &Vocabulary File";
-            this.LoadVocabFileMnu.Click += new System.EventHandler(this.LoadVocabFileMnuClick);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(179, 6);
-            // 
-            // QuitMnu
-            // 
-            this.QuitMnu.Name = "QuitMnu";
-            this.QuitMnu.Size = new System.Drawing.Size(182, 22);
-            this.QuitMnu.Text = "&Quit";
-            this.QuitMnu.Click += new System.EventHandler(this.QuitMnuClick);
             // 
             // statusStrip1
             // 
@@ -156,7 +105,7 @@
             // 
             this.panel1.Controls.Add(this.toolStrip1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 24);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1075, 26);
             this.panel1.TabIndex = 2;
@@ -167,7 +116,11 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PreviewTBtn,
             this.toolStripSeparator2,
-            this.RunTBtn});
+            this.RunTBtn,
+            this.toolStripSeparator3,
+            this.OpenTBtn,
+            this.toolStripSeparator4,
+            this.SaveTBtn});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1075, 25);
@@ -202,10 +155,10 @@
             this.MainTabs.Controls.Add(this.MatrixTab);
             this.MainTabs.Controls.Add(this.VocabTab);
             this.MainTabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainTabs.Location = new System.Drawing.Point(0, 50);
+            this.MainTabs.Location = new System.Drawing.Point(0, 26);
             this.MainTabs.Name = "MainTabs";
             this.MainTabs.SelectedIndex = 0;
-            this.MainTabs.Size = new System.Drawing.Size(1075, 556);
+            this.MainTabs.Size = new System.Drawing.Size(1075, 580);
             this.MainTabs.TabIndex = 3;
             // 
             // MatrixTab
@@ -221,6 +174,41 @@
             this.MatrixTab.Text = "Matrix";
             this.MatrixTab.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.MatrixDgv);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(904, 523);
+            this.groupBox2.TabIndex = 4;
+            this.groupBox2.TabStop = false;
+            // 
+            // MatrixDgv
+            // 
+            this.MatrixDgv.AllowUserToAddRows = false;
+            this.MatrixDgv.AllowUserToDeleteRows = false;
+            this.MatrixDgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.MatrixDgv.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.MatrixDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MatrixDgv.ColumnHeadersVisible = false;
+            this.MatrixDgv.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MatrixDgv.Location = new System.Drawing.Point(3, 17);
+            this.MatrixDgv.Name = "MatrixDgv";
+            this.MatrixDgv.RowHeadersVisible = false;
+            this.MatrixDgv.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(8);
+            this.MatrixDgv.Size = new System.Drawing.Size(898, 503);
+            this.MatrixDgv.TabIndex = 1;
+            // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter1.Location = new System.Drawing.Point(907, 3);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(4, 523);
+            this.splitter1.TabIndex = 3;
+            this.splitter1.TabStop = false;
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.VocabListBox);
@@ -233,6 +221,7 @@
             // 
             // VocabListBox
             // 
+            this.VocabListBox.CheckOnClick = true;
             this.VocabListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.VocabListBox.FormattingEnabled = true;
             this.VocabListBox.Location = new System.Drawing.Point(0, 28);
@@ -281,7 +270,7 @@
             this.VocabTab.Location = new System.Drawing.Point(4, 23);
             this.VocabTab.Name = "VocabTab";
             this.VocabTab.Padding = new System.Windows.Forms.Padding(3);
-            this.VocabTab.Size = new System.Drawing.Size(1067, 529);
+            this.VocabTab.Size = new System.Drawing.Size(1067, 553);
             this.VocabTab.TabIndex = 1;
             this.VocabTab.Text = "Vocabulary";
             this.VocabTab.UseVisualStyleBackColor = true;
@@ -292,7 +281,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(3, 84);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1061, 442);
+            this.groupBox3.Size = new System.Drawing.Size(1061, 466);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             // 
@@ -312,8 +301,60 @@
             this.VocabDgv.Location = new System.Drawing.Point(3, 17);
             this.VocabDgv.Name = "VocabDgv";
             this.VocabDgv.RowHeadersWidth = 24;
-            this.VocabDgv.Size = new System.Drawing.Size(1055, 422);
+            this.VocabDgv.Size = new System.Drawing.Size(1055, 446);
             this.VocabDgv.TabIndex = 0;
+            // 
+            // Column6
+            // 
+            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Column6.DataPropertyName = "IsPicked";
+            this.Column6.FalseValue = "false";
+            this.Column6.HeaderText = "";
+            this.Column6.Name = "Column6";
+            this.Column6.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Column6.TrueValue = "true";
+            this.Column6.Width = 40;
+            // 
+            // Column1
+            // 
+            this.Column1.DataPropertyName = "KoWord";
+            this.Column1.HeaderText = "Korean";
+            this.Column1.MinimumWidth = 200;
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 200;
+            // 
+            // Column2
+            // 
+            this.Column2.DataPropertyName = "EnWord";
+            this.Column2.HeaderText = "English";
+            this.Column2.MinimumWidth = 200;
+            this.Column2.Name = "Column2";
+            this.Column2.Width = 200;
+            // 
+            // Column3
+            // 
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column3.DataPropertyName = "Orient";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Column3.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Column3.HeaderText = "Horiz";
+            this.Column3.Name = "Column3";
+            this.Column3.Width = 67;
+            // 
+            // Column4
+            // 
+            this.Column4.DataPropertyName = "X";
+            this.Column4.HeaderText = "Col";
+            this.Column4.Name = "Column4";
+            this.Column4.Width = 53;
+            // 
+            // Column5
+            // 
+            this.Column5.DataPropertyName = "Y";
+            this.Column5.HeaderText = "Row";
+            this.Column5.Name = "Column5";
+            this.Column5.Width = 53;
             // 
             // groupBox1
             // 
@@ -374,92 +415,33 @@
             this.label1.Text = "Columns";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // Column6
+            // toolStripSeparator3
             // 
-            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Column6.DataPropertyName = "IsPicked";
-            this.Column6.FalseValue = "false";
-            this.Column6.HeaderText = "";
-            this.Column6.Name = "Column6";
-            this.Column6.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Column6.TrueValue = "true";
-            this.Column6.Width = 40;
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // Column1
+            // SaveTBtn
             // 
-            this.Column1.DataPropertyName = "KoWord";
-            this.Column1.HeaderText = "Korean";
-            this.Column1.MinimumWidth = 200;
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 200;
+            this.SaveTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.SaveTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SaveTBtn.Name = "SaveTBtn";
+            this.SaveTBtn.Size = new System.Drawing.Size(35, 22);
+            this.SaveTBtn.Text = "&Save";
+            this.SaveTBtn.Click += new System.EventHandler(this.SaveMnuClick);
             // 
-            // Column2
+            // OpenTBtn
             // 
-            this.Column2.DataPropertyName = "EnWord";
-            this.Column2.HeaderText = "English";
-            this.Column2.MinimumWidth = 200;
-            this.Column2.Name = "Column2";
-            this.Column2.Width = 200;
+            this.OpenTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.OpenTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.OpenTBtn.Name = "OpenTBtn";
+            this.OpenTBtn.Size = new System.Drawing.Size(40, 22);
+            this.OpenTBtn.Text = "&Open";
+            this.OpenTBtn.Click += new System.EventHandler(this.LoadVocabFileMnuClick);
             // 
-            // Column3
+            // toolStripSeparator4
             // 
-            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column3.DataPropertyName = "Orient";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Column3.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Column3.HeaderText = "Horiz";
-            this.Column3.Name = "Column3";
-            this.Column3.Width = 67;
-            // 
-            // Column4
-            // 
-            this.Column4.DataPropertyName = "X";
-            this.Column4.HeaderText = "Col";
-            this.Column4.Name = "Column4";
-            this.Column4.Width = 53;
-            // 
-            // Column5
-            // 
-            this.Column5.DataPropertyName = "Y";
-            this.Column5.HeaderText = "Row";
-            this.Column5.Name = "Column5";
-            this.Column5.Width = 53;
-            // 
-            // splitter1
-            // 
-            this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(907, 3);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(4, 523);
-            this.splitter1.TabIndex = 3;
-            this.splitter1.TabStop = false;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.MatrixDgv);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(3, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(904, 523);
-            this.groupBox2.TabIndex = 4;
-            this.groupBox2.TabStop = false;
-            // 
-            // MatrixDgv
-            // 
-            this.MatrixDgv.AllowUserToAddRows = false;
-            this.MatrixDgv.AllowUserToDeleteRows = false;
-            this.MatrixDgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.MatrixDgv.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.MatrixDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.MatrixDgv.ColumnHeadersVisible = false;
-            this.MatrixDgv.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MatrixDgv.Location = new System.Drawing.Point(3, 17);
-            this.MatrixDgv.Name = "MatrixDgv";
-            this.MatrixDgv.RowHeadersVisible = false;
-            this.MatrixDgv.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(8);
-            this.MatrixDgv.Size = new System.Drawing.Size(898, 503);
-            this.MatrixDgv.TabIndex = 1;
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // MainForm
             // 
@@ -469,13 +451,10 @@
             this.Controls.Add(this.MainTabs);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Source Code Pro", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "KoWordSearch";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -484,6 +463,8 @@
             this.toolStrip1.PerformLayout();
             this.MainTabs.ResumeLayout(false);
             this.MatrixTab.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MatrixDgv)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
@@ -493,16 +474,10 @@
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MatrixRowsNud)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MatrixColsNud)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.MatrixDgv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
 		}
-
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem FileMenu;
-        private System.Windows.Forms.ToolStripMenuItem QuitMnu;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusLb;
         private System.Windows.Forms.Panel panel1;
@@ -518,11 +493,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown MatrixColsNud;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ToolStripMenuItem SaveMnu;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton PreviewTBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem LoadVocabFileMnu;
 
         #endregion
 
@@ -540,5 +512,9 @@
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView MatrixDgv;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton OpenTBtn;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripButton SaveTBtn;
     }
 }

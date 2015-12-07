@@ -87,16 +87,15 @@ namespace KoWordSearch
 			ConfigSave();
 		}
 
-		
-		/// <summary>
-		/// Saves current configuration when the User quits and closes the application
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void QuitMnuClick(object sender, EventArgs e)
-		{
-			ConfigSave();
-			this.Close();
+
+        /// <summary>
+        /// Saves current configuration when the User quits and closes the application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ConfigSave();
 		}
 		
 		
@@ -105,18 +104,25 @@ namespace KoWordSearch
 		/// </summary>
 		private void ConfigSave()
 		{
-			StringBuilder sb = new StringBuilder("[Vocabulary]" + CRLF);
-			sb.Append(CFG_VOCABULARY_FILE + "=" + Application.StartupPath + @"\Vocabulary\Vocab-0001.txt" + CRLF);
-			sb.Append("[Matrix]");
-			sb.Append(CFG_MATRIX_COLS + "=" + this.MatrixColsNud.Value.ToString() + CRLF);
-			sb.Append(CFG_MATRIX_ROWS + "=" + this.MatrixRowsNud.Value.ToString() + CRLF);
-			sb.Append(CFG_TRIES_MAXIMUM + "=" + m_TriesMaximum.ToString() + CRLF);
-            sb.Append(CFG_LIST_LANGUAGE + "=" + this.EnglishRadio.Checked.ToString() + CRLF);
-			if (File.Exists(CONFIG_FILE))
-			{
-			File.Delete(CONFIG_FILE);
-			}
-			File.WriteAllText(CONFIG_FILE, sb.ToString());				
+            try
+            {
+                StringBuilder sb = new StringBuilder("[Vocabulary]" + CRLF);
+                sb.Append(CFG_VOCABULARY_FILE + "=" + Application.StartupPath + @"\Vocabulary\Vocab-0001.txt" + CRLF);
+                sb.Append("[Matrix]");
+                sb.Append(CFG_MATRIX_COLS + "=" + this.MatrixColsNud.Value.ToString() + CRLF);
+                sb.Append(CFG_MATRIX_ROWS + "=" + this.MatrixRowsNud.Value.ToString() + CRLF);
+                sb.Append(CFG_TRIES_MAXIMUM + "=" + m_TriesMaximum.ToString() + CRLF);
+                sb.Append(CFG_LIST_LANGUAGE + "=" + this.EnglishRadio.Checked.ToString() + CRLF);
+                if (File.Exists(CONFIG_FILE))
+                {
+                    File.Delete(CONFIG_FILE);
+                }
+                File.WriteAllText(CONFIG_FILE, sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error Save Configuration File" + CRLF + ex.Message, "Save Configuration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 		}
 		
 		
@@ -581,6 +587,7 @@ namespace KoWordSearch
                 ((ListBox)this.VocabListBox).DisplayMember = VOC_KOWORD;
             }
         }
+
 
     }
 }
