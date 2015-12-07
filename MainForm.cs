@@ -1,6 +1,7 @@
-﻿/* 
- * 11/2/2015  Created by //AJ
- */
+﻿/// <summary>
+/// Korean Word Search Application
+/// 11/2/2015  Created by //AJ
+/// </summary>
 using System;
 using System.Data;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ namespace KoWordSearch
 		private const string VOC_ORIENT = "Orient";
 		private const string VOC_X = "X";
 		private const string VOC_Y = "Y";
+        private const string VOC_ISPICKED = "IsPicked";
 				
 		private const string CRLF = "\x000d\x000a";
 		private Random m_Ran = new Random(0);
@@ -49,6 +51,7 @@ namespace KoWordSearch
 		private const string CFG_MATRIX_ROWS = "Matrix_Rows";
 		private const string CFG_MATRIX_COLS = "Matrix_Cols";
 		private const string CFG_TRIES_MAXIMUM = "Tries_Maximum";
+        private const string CFG_LIST_LANGUAGE = "List_Language";
 		#endregion
 
 
@@ -68,7 +71,8 @@ namespace KoWordSearch
 			m_VocabTbl.Columns[VOC_X].DefaultValue = 0;
 			m_VocabTbl.Columns.Add(new DataColumn(VOC_Y, typeof(int)));
 			m_VocabTbl.Columns[VOC_Y].DefaultValue = 0;
-			
+            m_VocabTbl.Columns.Add(new DataColumn(VOC_ISPICKED, typeof(bool)));
+            m_VocabTbl.Columns[VOC_ISPICKED].DefaultValue = false;
 			ConfigLoad();
 		}
 		
@@ -107,6 +111,7 @@ namespace KoWordSearch
 			sb.Append(CFG_MATRIX_COLS + "=" + this.MatrixColsNud.Value.ToString() + CRLF);
 			sb.Append(CFG_MATRIX_ROWS + "=" + this.MatrixRowsNud.Value.ToString() + CRLF);
 			sb.Append(CFG_TRIES_MAXIMUM + "=" + m_TriesMaximum.ToString() + CRLF);
+            sb.Append(CFG_LIST_LANGUAGE + "=" + this.EnglishRadio.Checked.ToString() + CRLF);
 			if (File.Exists(CONFIG_FILE))
 			{
 			File.Delete(CONFIG_FILE);
@@ -139,7 +144,7 @@ namespace KoWordSearch
 									VocabLoad();
 								}
 							}
-							if (lrs[0].Trim() == CFG_MATRIX_COLS)
+							else if (lrs[0].Trim() == CFG_MATRIX_COLS)
 							{
 								try
 								{
@@ -151,7 +156,7 @@ namespace KoWordSearch
 									// default per design mode
 								}
 							}
-							if (lrs[0].Trim() == CFG_MATRIX_ROWS)
+							else if (lrs[0].Trim() == CFG_MATRIX_ROWS)
 							{
 								try
 								{
@@ -163,7 +168,7 @@ namespace KoWordSearch
 									// default per design mode
 								}
 							}
-							if (lrs[0].Trim() == CFG_TRIES_MAXIMUM)
+							else if (lrs[0].Trim() == CFG_TRIES_MAXIMUM)
 							{
 								try
 								{
@@ -175,8 +180,20 @@ namespace KoWordSearch
 									// default per design mode
 								}
 							}
-						}
-					}
+                            else if (lrs[0].Trim() == CFG_LIST_LANGUAGE)
+                            {
+                                try
+                                {
+                                    bool test = Convert.ToBoolean(lrs[1].Trim());
+                                    this.EnglishRadio.Checked = test;
+                                }
+                                catch
+                                {
+                                    // default per design mode
+                                }
+                            }
+                        }
+                    }
 					isIniLoaded = true;
 				}
 				catch (Exception ex)
@@ -303,7 +320,8 @@ namespace KoWordSearch
 			m_VocabTbl.AcceptChanges();
 			m_VocabBs.DataSource = m_VocabTbl.DefaultView;
 			this.VocabDgv.DataSource = m_VocabBs;
-			int iMatrixMinimum = MatrixMinimum();
+            VocabListBox_SetLanguage();
+            int iMatrixMinimum = MatrixMinimum();
 			this.StatusLb.Text = "Vocabulary Loaded.  Minimum Matrix Size = " + iMatrixMinimum.ToString() + " x " + iMatrixMinimum.ToString();
 		}
 
@@ -531,8 +549,38 @@ namespace KoWordSearch
 			}
 			ofDlg.Dispose();			
 		}
-		
-		#endregion
-				
-	}
+
+        #endregion
+
+
+        /// <summary>
+        /// Changes the Vocabulary List to the Language the User selects
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LanguageRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            VocabListBox_SetLanguage();
+        }
+
+
+        /// <summary>
+        /// Sets the Vocabulary List Language to the current selected Language
+        /// </summary>
+        private void VocabListBox_SetLanguage()
+        {
+            this.VocabListBox.DataBindings.Clear();
+            ((ListBox)this.VocabListBox).DataSource = m_VocabTbl.DefaultView;
+            ((ListBox)this.VocabListBox).ValueMember = VOC_ISPICKED;
+            if (this.EnglishRadio.Checked)
+            {
+                ((ListBox)this.VocabListBox).DisplayMember = VOC_ENWORD;
+            }
+            else
+            {
+                ((ListBox)this.VocabListBox).DisplayMember = VOC_KOWORD;
+            }
+        }
+
+    }
 }
