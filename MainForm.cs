@@ -1,7 +1,5 @@
-﻿/* Created by SharpDevelop.
- * User: AJ
- * Date: 11/2/2015
- * Time: 7:15 PM
+﻿/* 
+ * 11/2/2015  Created by //AJ
  */
 using System;
 using System.Data;
@@ -19,10 +17,15 @@ namespace KoWordSearch
 	public partial class MainForm : Form
 	{
 		#region  [ Members ]
-		
+		/// <summary>
+		/// Matrix Data Table
+		/// </summary>
 		private BindingSource m_MatrixBs = new BindingSource();
 		private DataTable m_MatrixTbl = new DataTable("MatrixTbl");
 		
+		/// <summary>
+		/// Vocabulary Data Table
+		/// </summary>		
 		private BindingSource m_VocabBs = new BindingSource();
 		private DataTable m_VocabTbl = new DataTable("VocabTbl");
 		private string m_VocabFile = Application.StartupPath + @"\Vocabulary\Vocab-0001.txt";
@@ -49,13 +52,11 @@ namespace KoWordSearch
 		#endregion
 
 
-		#region [ Constructor / Destructor ]
+		#region [ Constructor and Configuration ]
 
 		public MainForm()
 		{
-			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
 			InitializeComponent();
 
 			m_VocabTbl.Columns.Add(new DataColumn(VOC_KOWORD, typeof(string)));
@@ -71,17 +72,52 @@ namespace KoWordSearch
 			ConfigLoad();
 		}
 		
-		
-		private void QuitMnuClick(object sender, EventArgs e)
+
+		/// <summary>
+		/// Saves the current configuration for the User
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void SaveMnuClick(object sender, EventArgs e)
 		{
-			this.Close();
+			ConfigSave();
 		}
 
-		#endregion
 		
-
-		#region  [ Methods ]
+		/// <summary>
+		/// Saves current configuration when the User quits and closes the application
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void QuitMnuClick(object sender, EventArgs e)
+		{
+			ConfigSave();
+			this.Close();
+		}
 		
+		
+		/// <summary>
+		/// Saves the configuration
+		/// </summary>
+		private void ConfigSave()
+		{
+			StringBuilder sb = new StringBuilder("[Vocabulary]" + CRLF);
+			sb.Append(CFG_VOCABULARY_FILE + "=" + Application.StartupPath + @"\Vocabulary\Vocab-0001.txt" + CRLF);
+			sb.Append("[Matrix]");
+			sb.Append(CFG_MATRIX_COLS + "=" + this.MatrixColsNud.Value.ToString() + CRLF);
+			sb.Append(CFG_MATRIX_ROWS + "=" + this.MatrixRowsNud.Value.ToString() + CRLF);
+			sb.Append(CFG_TRIES_MAXIMUM + "=" + m_TriesMaximum.ToString() + CRLF);
+			if (File.Exists(CONFIG_FILE))
+			{
+			File.Delete(CONFIG_FILE);
+			}
+			File.WriteAllText(CONFIG_FILE, sb.ToString());				
+		}
+		
+		
+		/// <summary>
+		/// Loads the Configuration Settings
+		/// </summary>
 		private void ConfigLoad()
 		{
 			bool isIniLoaded = false;
@@ -156,13 +192,19 @@ namespace KoWordSearch
 			}
 		}
 		
-	
+		
+		/// <summary>
+		/// Rebuilds the Matrix when the user changes the Columns count
+		/// </summary>
 		private void ColumnsNudValueChanged(object sender, EventArgs e)
 		{
 			ColumnsBuild();
 		}
 		
 		
+		/// <summary>
+		/// Rebuilds the Matrix Columns
+		/// </summary>
 		private void ColumnsBuild()
 		{
 			m_MatrixBs.DataSource = null;
@@ -181,7 +223,21 @@ namespace KoWordSearch
 			this.MatrixDgv.DataSource = m_MatrixBs;
 		}
 		
+
+		/// <summary>
+		/// Rebuilds the Matrix when the User changes the Rows count
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void RowsNudValueChanged(object sender, EventArgs e)
+		{
+			RowsBuild();
+		}
+
 		
+		/// <summary>
+		/// Rebuilds the Matrix Rows
+		/// </summary>
 		private void RowsBuild()
 		{
 			m_MatrixTbl.Rows.Clear();
@@ -193,35 +249,6 @@ namespace KoWordSearch
 			}
 			m_MatrixTbl.AcceptChanges();			
 		}
-
-		
-		private void RowsNudValueChanged(object sender, EventArgs e)
-		{
-			RowsBuild();
-		}
-		
-		
-		private void ConfigSave()
-		{
-			StringBuilder sb = new StringBuilder("[Vocabulary]" + CRLF);
-			sb.Append(CFG_VOCABULARY_FILE + "=" + Application.StartupPath + @"\Vocabulary\Vocab-0001.txt" + CRLF);
-			sb.Append("[Matrix]");
-			sb.Append(CFG_MATRIX_COLS + "=" + this.MatrixColsNud.Value.ToString() + CRLF);
-			sb.Append(CFG_MATRIX_ROWS + "=" + this.MatrixRowsNud.Value.ToString() + CRLF);
-			sb.Append(CFG_TRIES_MAXIMUM + "=" + m_TriesMaximum.ToString() + CRLF);
-			if (File.Exists(CONFIG_FILE))
-			{
-			File.Delete(CONFIG_FILE);
-			}
-			File.WriteAllText(CONFIG_FILE, sb.ToString());				
-		}
-		
-		
-		private void SaveMnuClick(object sender, EventArgs e)
-		{
-			ConfigSave();
-		}
-		
 		
 		
 		/// <summary>
@@ -234,6 +261,9 @@ namespace KoWordSearch
 		}
 	
 		
+		/// <summary>
+		/// Loads the Vacabulary data from the selected vocabulary file
+		/// </summary>
 		private void VocabLoad()
 		{
 			m_VocabTbl.Rows.Clear();
@@ -241,6 +271,7 @@ namespace KoWordSearch
 			{
 				return;
 			}
+			
 			string[] vocablines = File.ReadAllLines(m_VocabFile);			
 			foreach (string vocab in vocablines)
 			{
@@ -296,6 +327,9 @@ namespace KoWordSearch
 		}
 		
 		
+		/// <summary>
+		/// Places the vocabulary words into the Matrix
+		/// </summary>
 		private void VocabLayout()
 		{
 			ColumnsBuild();
@@ -434,6 +468,11 @@ namespace KoWordSearch
 		}
 		
 		
+		/// <summary>
+		/// Generate the Final Word Search
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void RunTBtnClick(object sender, EventArgs e)
 		{
 			//VocabLoad();
@@ -455,7 +494,12 @@ namespace KoWordSearch
 		}
 		
 		
-		void PreviewTBtnClick(object sender, EventArgs e)
+		/// <summary>
+		/// Loads the Vocabulary List and Places the words in the Matrix
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void PreviewTBtnClick(object sender, EventArgs e)
 		{
 			VocabLoad();
 			VocabLayout();
@@ -468,7 +512,7 @@ namespace KoWordSearch
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void LoadVocabFileMnuClick(object sender, EventArgs e)
+		private void LoadVocabFileMnuClick(object sender, EventArgs e)
 		{
 			OpenFileDialog ofDlg = new OpenFileDialog();
 			ofDlg.DefaultExt = "txt";
