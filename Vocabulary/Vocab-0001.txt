@@ -1,17 +1,58 @@
-﻿고양이, cat
+﻿가다, to go
+고양이, cat
+공항, airport
+공원, park
+귀, ear
+길다, long
 개, dog
+낡다, antiquated
+너무, too
+눈, eye
+다리, leg
+닫다, to close
 돼지, pig
+마나다, to meet
+만들다, to make
 말, horse
+말하다, to speak
 맛있다, delicious
+먹다, to eat
+모리, head
 믈고기, fish
 매달리다, hang
+매우, very
+버스, bus
+병원, hospital
 부모님, parents
+비싸다, expensive
+배, boat
+배, stomach
 소매, sleeve
+손가락, finger
 시계, clock
 신, god
 수학, mathematics
+새롭다, new
+작다, small
+좋다, good
+좋아하다, to like
+팔, arm
+하다, to do
+한국어, Korean language
 행성, planet
+뚱뚱하다, fat, chubby
+싸다, cheap, inexpensive
+아름답다, beautiful
+아주, very
 양, sheep
 양식, western food
+열다, to open
+우리, our, us, we
 우주선, spaceship
 은하계, galaxy
+음식, food
+이래하다, to understand
+입, mouth
+원하다, to want a thing
+크다, big
+케이크, cake

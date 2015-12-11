@@ -41,7 +41,7 @@ namespace KoWordSearch
 				
 		private const string CRLF = "\x000d\x000a";
 		private Random m_Ran = new Random(0);
-		private int m_TriesMaximum = 10000;
+		private int m_TriesMaximum = 4000;
 			
 		/// <summary>
 		/// Configuration Parameters
@@ -108,7 +108,7 @@ namespace KoWordSearch
             {
                 StringBuilder sb = new StringBuilder("[Vocabulary]" + CRLF);
                 sb.Append(CFG_VOCABULARY_FILE + "=" + Application.StartupPath + @"\Vocabulary\Vocab-0001.txt" + CRLF);
-                sb.Append("[Matrix]");
+                sb.Append("[Matrix]" + CRLF);
                 sb.Append(CFG_MATRIX_COLS + "=" + this.MatrixColsNud.Value.ToString() + CRLF);
                 sb.Append(CFG_MATRIX_ROWS + "=" + this.MatrixRowsNud.Value.ToString() + CRLF);
                 sb.Append(CFG_TRIES_MAXIMUM + "=" + m_TriesMaximum.ToString() + CRLF);
