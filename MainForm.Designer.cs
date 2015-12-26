@@ -30,6 +30,7 @@
         /// </summary>
         private void InitializeComponent()
 		{
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLb = new System.Windows.Forms.ToolStripStatusLabel();
@@ -38,6 +39,12 @@
             this.PreviewTBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.RunTBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.OpenTBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.SaveTBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.PrintTBtn = new System.Windows.Forms.ToolStripButton();
             this.MainTabs = new System.Windows.Forms.TabControl();
             this.MatrixTab = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -62,10 +69,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.MatrixColsNud = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.SaveTBtn = new System.Windows.Forms.ToolStripButton();
-            this.OpenTBtn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -120,7 +123,9 @@
             this.toolStripSeparator3,
             this.OpenTBtn,
             this.toolStripSeparator4,
-            this.SaveTBtn});
+            this.SaveTBtn,
+            this.toolStripSeparator1,
+            this.PrintTBtn});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1075, 25);
@@ -150,6 +155,48 @@
             this.RunTBtn.Text = "&Run";
             this.RunTBtn.Click += new System.EventHandler(this.RunTBtnClick);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // OpenTBtn
+            // 
+            this.OpenTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.OpenTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.OpenTBtn.Name = "OpenTBtn";
+            this.OpenTBtn.Size = new System.Drawing.Size(40, 22);
+            this.OpenTBtn.Text = "&Open";
+            this.OpenTBtn.Click += new System.EventHandler(this.LoadVocabFileMnuClick);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // SaveTBtn
+            // 
+            this.SaveTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.SaveTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SaveTBtn.Name = "SaveTBtn";
+            this.SaveTBtn.Size = new System.Drawing.Size(35, 22);
+            this.SaveTBtn.Text = "&Save";
+            this.SaveTBtn.Click += new System.EventHandler(this.SaveMnuClick);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // PrintTBtn
+            // 
+            this.PrintTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.PrintTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.PrintTBtn.Name = "PrintTBtn";
+            this.PrintTBtn.Size = new System.Drawing.Size(36, 22);
+            this.PrintTBtn.Text = "&Print";
+            this.PrintTBtn.Click += new System.EventHandler(this.PrintTBtn_Click);
+            // 
             // MainTabs
             // 
             this.MainTabs.Controls.Add(this.MatrixTab);
@@ -169,7 +216,7 @@
             this.MatrixTab.Location = new System.Drawing.Point(4, 23);
             this.MatrixTab.Name = "MatrixTab";
             this.MatrixTab.Padding = new System.Windows.Forms.Padding(3);
-            this.MatrixTab.Size = new System.Drawing.Size(1067, 529);
+            this.MatrixTab.Size = new System.Drawing.Size(1067, 553);
             this.MatrixTab.TabIndex = 0;
             this.MatrixTab.Text = "Matrix";
             this.MatrixTab.UseVisualStyleBackColor = true;
@@ -180,7 +227,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(904, 523);
+            this.groupBox2.Size = new System.Drawing.Size(904, 547);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             // 
@@ -192,12 +239,22 @@
             this.MatrixDgv.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.MatrixDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.MatrixDgv.ColumnHeadersVisible = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Source Code Pro", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.MatrixDgv.DefaultCellStyle = dataGridViewCellStyle1;
             this.MatrixDgv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MatrixDgv.Location = new System.Drawing.Point(3, 17);
             this.MatrixDgv.Name = "MatrixDgv";
             this.MatrixDgv.RowHeadersVisible = false;
-            this.MatrixDgv.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(8);
-            this.MatrixDgv.Size = new System.Drawing.Size(898, 503);
+            this.MatrixDgv.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.MatrixDgv.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Batang", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MatrixDgv.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(4);
+            this.MatrixDgv.Size = new System.Drawing.Size(898, 527);
             this.MatrixDgv.TabIndex = 1;
             // 
             // splitter1
@@ -205,7 +262,7 @@
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitter1.Location = new System.Drawing.Point(907, 3);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(4, 523);
+            this.splitter1.Size = new System.Drawing.Size(4, 547);
             this.splitter1.TabIndex = 3;
             this.splitter1.TabStop = false;
             // 
@@ -216,7 +273,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(911, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(153, 523);
+            this.panel2.Size = new System.Drawing.Size(153, 547);
             this.panel2.TabIndex = 2;
             // 
             // VocabListBox
@@ -226,7 +283,7 @@
             this.VocabListBox.FormattingEnabled = true;
             this.VocabListBox.Location = new System.Drawing.Point(0, 28);
             this.VocabListBox.Name = "VocabListBox";
-            this.VocabListBox.Size = new System.Drawing.Size(153, 495);
+            this.VocabListBox.Size = new System.Drawing.Size(153, 519);
             this.VocabListBox.TabIndex = 14;
             // 
             // panel3
@@ -415,34 +472,6 @@
             this.label1.Text = "Columns";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // SaveTBtn
-            // 
-            this.SaveTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.SaveTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SaveTBtn.Name = "SaveTBtn";
-            this.SaveTBtn.Size = new System.Drawing.Size(35, 22);
-            this.SaveTBtn.Text = "&Save";
-            this.SaveTBtn.Click += new System.EventHandler(this.SaveMnuClick);
-            // 
-            // OpenTBtn
-            // 
-            this.OpenTBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.OpenTBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.OpenTBtn.Name = "OpenTBtn";
-            this.OpenTBtn.Size = new System.Drawing.Size(40, 22);
-            this.OpenTBtn.Text = "&Open";
-            this.OpenTBtn.Click += new System.EventHandler(this.LoadVocabFileMnuClick);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -451,6 +480,7 @@
             this.Controls.Add(this.MainTabs);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Source Code Pro", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
             this.Text = "KoWordSearch";
@@ -516,5 +546,7 @@
         private System.Windows.Forms.ToolStripButton OpenTBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton SaveTBtn;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton PrintTBtn;
     }
 }

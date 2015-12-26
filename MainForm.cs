@@ -1,21 +1,22 @@
 ﻿/// <summary>
 /// Korean Word Search Application
-/// 11/2/2015  Created by //AJ
+/// To Do:  Add Vocabulary to bottom of printed page
+/// 12/25/2015  Matrix Print Preview Added
+/// 11/02/2015  Created by //AJ
 /// </summary>
+
 using System;
 using System.Data;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
 namespace KoWordSearch
 {
-	/// <summary>
-	/// Description of MainForm.
-	/// </summary>
-	public partial class MainForm : Form
+    /// <summary>
+    /// Description of MainForm.
+    /// </summary>
+    public partial class MainForm : Form
 	{
 		#region  [ Members ]
 		/// <summary>
@@ -52,6 +53,9 @@ namespace KoWordSearch
 		private const string CFG_MATRIX_COLS = "Matrix_Cols";
 		private const string CFG_TRIES_MAXIMUM = "Tries_Maximum";
         private const string CFG_LIST_LANGUAGE = "List_Language";
+
+        private const string CFG_WINDOW_WIDTH = "Window_Width";
+        private const string CFG_WINDOW_HEIGHT = "Window_Height";
 		#endregion
 
 
@@ -113,6 +117,9 @@ namespace KoWordSearch
                 sb.Append(CFG_MATRIX_ROWS + "=" + this.MatrixRowsNud.Value.ToString() + CRLF);
                 sb.Append(CFG_TRIES_MAXIMUM + "=" + m_TriesMaximum.ToString() + CRLF);
                 sb.Append(CFG_LIST_LANGUAGE + "=" + this.EnglishRadio.Checked.ToString() + CRLF);
+                sb.Append("[Display]" + CRLF);
+                sb.Append(CFG_WINDOW_WIDTH + "=" + this.Width.ToString() + CRLF);
+                sb.Append(CFG_WINDOW_HEIGHT + "=" + this.Height.ToString() + CRLF);
                 if (File.Exists(CONFIG_FILE))
                 {
                     File.Delete(CONFIG_FILE);
@@ -198,6 +205,29 @@ namespace KoWordSearch
                                     // default per design mode
                                 }
                             }
+
+                            else if (lrs[0].Trim() == CFG_WINDOW_WIDTH)
+                            {
+                                try
+                                {
+                                    this.Width = Convert.ToInt32(lrs[1].Trim());
+                                }
+                                catch
+                                {
+                                    // default per design mode
+                                }
+                            }
+                            else if (lrs[0].Trim() == CFG_WINDOW_HEIGHT)
+                            {
+                                try
+                                {
+                                    this.Height = Convert.ToInt32(lrs[1].Trim());
+                                }
+                                catch
+                                {
+                                    // default per design mode
+                                }
+                            }
                         }
                     }
 					isIniLoaded = true;
@@ -240,6 +270,7 @@ namespace KoWordSearch
 				this.MatrixDgv.Columns.Add(colName, colName);
 				this.MatrixDgv.Columns[cc].DataPropertyName = colName;
 				this.MatrixDgv.Columns[cc].Width = 60;
+                this.MatrixDgv.Columns[cc].DefaultCellStyle = this.MatrixDgv.DefaultCellStyle;
 			}
 			m_MatrixTbl.AcceptChanges();
 			m_MatrixBs.DataSource = m_MatrixTbl.DefaultView;
@@ -586,6 +617,13 @@ namespace KoWordSearch
             {
                 ((ListBox)this.VocabListBox).DisplayMember = VOC_KOWORD;
             }
+        }
+
+
+        private void PrintTBtn_Click(object sender, EventArgs e)
+        {
+            PrintPreviewDLG dlg = new PrintPreviewDLG(m_MatrixTbl, m_VocabTbl);
+            dlg.ShowDialog();
         }
 
 
