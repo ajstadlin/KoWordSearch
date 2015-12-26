@@ -28,19 +28,22 @@ namespace KoWordSearch
         public string Report_DateFormat = "MM/dd/yyyy HH:mm";
         public string Report_Date = "";
 
+        private const string FONTNAME_BATANG = "Batang";
+
         private Font Header_Font;
         private Font Matrix_Font;
+        private Brush Matrix_Brush;
+        private Brush Transparent_Brush;
         private Font Data_Font;
+        private Brush Data_Brush;
+        private Pen Grid_Pen;
         private Font Footer_Font;
-
-        public int RepCursor = 0;
-        public int RowsPerPage = 9;
 
         // Graphics variables
         public float Origin_Left = 0.0f;
         public float Origin_Top = 0.0f;
 
-        public float Header_Height = 50.0f;
+        public float Header_Height = 0.0f;
         public float Footer_Height = 16.0f;
 
         // Calculated
@@ -481,6 +484,10 @@ namespace KoWordSearch
                 this.XPrintDocument.PrinterSettings.PrintToFile = true;
                 this.XPrintDocument.PrinterSettings.PrintFileName = XPS_FilePath;
             }
+            else
+            {
+                this.XPrintDocument.PrinterSettings.PrinterName = Printer_Name;
+            }
 
             /// ** START Page Settings Management
             // Save vital XPageSettings
@@ -506,13 +513,15 @@ namespace KoWordSearch
 
         void On_BeginPrint(object sender, PrintEventArgs e)
         {
-            Header_Font = new Font(this.Font.Name, 8, FontStyle.Bold);
-            Matrix_Font = new Font("Batang", 16, FontStyle.Regular);
-            Data_Font = new Font(this.Font.Name, 8, FontStyle.Regular);
-            Footer_Font = new Font(this.Font.Name, 8, FontStyle.Regular);
-
+            Header_Font = new Font(FONTNAME_BATANG, 8, FontStyle.Bold);
+            Matrix_Font = new Font(FONTNAME_BATANG, 16, FontStyle.Regular);
+            Matrix_Brush = new System.Drawing.SolidBrush(Color.Black);
+            Data_Font = new Font(FONTNAME_BATANG, 9, FontStyle.Regular);
+            Data_Brush = new System.Drawing.SolidBrush(Color.Black);
+            Grid_Pen = new Pen(Color.DarkGray, 0);
+            Footer_Font = new Font(FONTNAME_BATANG, 8, FontStyle.Regular);
+            Transparent_Brush = new System.Drawing.SolidBrush(Color.Transparent);
             Report_Date = DateTime.Now.ToString(Report_DateFormat);
-            RepCursor = 0;
         }
 
 
@@ -559,135 +568,24 @@ namespace KoWordSearch
             Print_Header(ppea, szfHeader);
 
             float fPageY = Origin_Top + szfHeader.Height;
-            Pen penGrid = new Pen(Color.DarkGray, 0);
             try
             {
                 SizeF szfMatrix = new SizeF(ppea.MarginBounds.Width, Matrix_Height);
-                Print_Matrix(ppea, szfMatrix, fPageY);
+                fPageY = Print_Matrix(ppea, szfMatrix, fPageY);
 
-                SizeF szfData = new SizeF(ppea.MarginBounds.Width - ppea.MarginBounds.Width, Matrix_Height);
-                Print_Data(ppea, szfData, Origin_Left + ppea.MarginBounds.Width, fPageY);
+                fPageY += 8.0f;
 
-                fPageY += szfData.Height;
-
-                //Data_Height = szfRegion4.Height - 26.0F;
-                //float fRowHeight = Data_Height / RowsPerPage;
-                //float fDataBottom = ppea.MarginBounds.Height - 24.0f;
+                SizeF szfData = new SizeF(ppea.MarginBounds.Width, ppea.MarginBounds.Height - fPageY - Footer_Height);
+                fPageY = Print_Data(ppea, szfData, Origin_Left + ppea.MarginBounds.Width, fPageY);
 
                 // Print the Data
                 ppea.HasMorePages = false;  // in case there is no data or there is an error
-
-                fPageY += 20.0f;
-
-                // For each row on the page ...
-                //bool bRowProcessing = true;
-                //while (bRowProcessing && (RepCursor < t_ProjItem.Rows.Count))
-                //{
-                //    // Measure the Maximum Height of the Header Cells' Text and Calculate the Y coordinate of the cell bottom
-                //    if ((fPageY + fRowHeight + 4.0f) >= fDataBottom)
-                //    {
-                //        // Printing this Row will overflow the page.
-                //        // Defer to next page
-                //        ppea.HasMorePages = true;
-                //        break;
-                //    }
-
-                //    if (b_PageInRange)
-                //    {
-                //        if (PackList_Style == Report_Types.RT_PACKLIST_0)
-                //        {
-                //            ppea.Graphics.DrawLine(Pens.Black, Origin_Left + 100.0f, fPageY, Origin_Left + 100.0f, fPageY + fRowHeight);
-                //            ppea.Graphics.DrawLine(Pens.Black, Origin_Left + ppea.MarginBounds.Width - 90.0f, fPageY,
-                //                                   Origin_Left + ppea.MarginBounds.Width - 90.0f, fPageY + fRowHeight);
-                //        }
-                //        ppea.Graphics.DrawLine(Pens.Black, Origin_Left, fPageY + fRowHeight,
-                //                               Origin_Left + ppea.MarginBounds.Width, fPageY + fRowHeight);
-                //    }
-
-                //    fPageY += 4.0f;
-                //    SizeF szfArea = new SizeF(80.0f, fRowHeight);
-                //    if (b_PageInRange)
-                //    {
-                //        Report_Tools.DrawText_AlignLeft(ppea.Graphics, t_ProjItem.DefaultView[RepCursor][PackingListDB.C_ITM_PO_LINE_ITEM].ToString(),
-                //                                        Data_Font, Brushes.Black, szfArea, Origin_Left + 10.0f, fPageY);
-                //    }
-
-                //    szfArea = new SizeF(630.0f, fRowHeight);
-                //    string sCustomDscr = t_ProjItem.DefaultView[RepCursor][PackingListDB.C_CUSTOM_DSCR].ToString();
-                //    //t_ProjItem.DefaultView[RepCursor][PackingList_DB.C_DWGPART].ToString() + " - "
-                //    //+ Tools.ITF(t_ProjItem.DefaultView[RepCursor][PackingList_DB.C_DWGPARTMOD].ToString() == "", "", 
-                //    //            t_ProjItem.DefaultView[RepCursor][PackingList_DB.C_DWGPARTMOD].ToString() +  ", ")
-                //    //+ t_ProjItem.DefaultView[RepCursor][PackingList_DB.C_PART_DESCRIPTION].ToString() + Log.CRLF
-                //    //+ t_ProjItem.DefaultView[RepCursor][PackingList_DB.C_ITM_NOTES].ToString().Trim();
-                //    if (b_PageInRange)
-                //    {
-                //        Report_Tools.DrawText_AlignLeft(ppea.Graphics, sCustomDscr,
-                //                                        Data_Font, Brushes.Black, szfArea, Origin_Left + 110.0f, fPageY);
-                //    }
-
-                //    szfArea = new SizeF(80.0f, fRowHeight);
-                //    if (b_PageInRange)
-                //    {
-                //        Report_Tools.DrawText_AlignLeft(ppea.Graphics, t_ProjItem.DefaultView[RepCursor][PackingListDB.C_ITM_QTY].ToString(),
-                //                                        Data_Font, Brushes.Black, szfArea, Origin_Left + ppea.MarginBounds.Width - 80.0f, fPageY);
-                //    }
-
-                //    if ((PackList_Style == Report_Types.RT_PACKLIST_1)
-                //        || (PackList_Style == Report_Types.RT_PACKLIST_2))
-                //    {
-                //        string sCaption = "Line Item";
-                //        SizeF szfCaption = ppea.Graphics.MeasureString(sCaption, BarcodeCap_Font);
-                //        if (b_PageInRange)
-                //        {
-                //            ppea.Graphics.DrawString(sCaption, BarcodeCap_Font, Brushes.Black, Origin_Left + 16f, fPageY + 32f);
-
-                //            sCaption = t_ProjItem.DefaultView[RepCursor][PackingListDB.C_ITM_PO_LINE_ITEM].ToString().Trim();
-                //            string sBarcode = Barcode.StrToBarcode128(sCaption);
-                //            SizeF szfBarcode = ppea.Graphics.MeasureString(sBarcode, Barcode_Font);
-                //            PointF xyLoc = new PointF(Origin_Left + 10f, fPageY + 30f + szfCaption.Height);
-                //            ppea.Graphics.DrawString(sBarcode, Barcode_Font, Brushes.Black, xyLoc);
-                //            ppea.Graphics.DrawString(sCaption, BarcodeCap_Font, Brushes.Black,
-                //                                     xyLoc.X + 10.0f, xyLoc.Y + szfBarcode.Height - 2.0f);
-
-                //            sCaption = "Part Number";
-                //            szfCaption = ppea.Graphics.MeasureString(sCaption, BarcodeCap_Font);
-                //            ppea.Graphics.DrawString(sCaption, BarcodeCap_Font, Brushes.Black, Origin_Left + 206.0f, fPageY + 32f);
-
-                //            sCaption = t_ProjItem.DefaultView[RepCursor][PackingListDB.C_CUSTOM_PART].ToString().Trim();
-                //            sBarcode = Barcode.StrToBarcode128(sCaption);
-                //            szfBarcode = ppea.Graphics.MeasureString(sBarcode, Barcode_Font);
-                //            xyLoc = new PointF(Origin_Left + 200.0f, fPageY + 30f + szfCaption.Height);
-                //            ppea.Graphics.DrawString(sBarcode, Barcode_Font, Brushes.Black, xyLoc);
-                //            ppea.Graphics.DrawString(sCaption, BarcodeCap_Font, Brushes.Black,
-                //                                     xyLoc.X + 10.0f, xyLoc.Y + szfBarcode.Height - 2.0f);
-
-                //            if (PackList_Style == Report_Types.RT_PACKLIST_2)
-                //            {
-                //                sCaption = t_ProjItem.DefaultView[RepCursor][PackingListDB.C_BARCODE1_CAPTION].ToString().Trim(); ;
-                //                szfCaption = ppea.Graphics.MeasureString(sCaption, BarcodeCap_Font);
-                //                ppea.Graphics.DrawString(sCaption, BarcodeCap_Font, Brushes.Black, Origin_Left + 532.0f, fPageY + 32f);
-
-                //                sCaption = t_ProjItem.DefaultView[RepCursor][PackingListDB.C_BARCODE1_DATA].ToString().Trim();
-                //                sBarcode = Barcode.StrToBarcode128(sCaption);
-                //                szfBarcode = ppea.Graphics.MeasureString(sBarcode, Barcode_Font);
-                //                xyLoc = new PointF(Origin_Left + 526.0f, fPageY + 30f + szfCaption.Height);
-                //                ppea.Graphics.DrawString(sBarcode, Barcode_Font, Brushes.Black, xyLoc);
-                //                ppea.Graphics.DrawString(sCaption, BarcodeCap_Font, Brushes.Black,
-                //                                         xyLoc.X + 10.0f, xyLoc.Y + szfBarcode.Height - 2.0f);
-                //            }
-                //        }
-                //    }
-                //    fPageY += fRowHeight - 4.0f;
-                //    ppea.HasMorePages = true;
-                //    RepCursor++;
-                //}
             }
             catch (Exception ex)
             {
                 //Log.Err(ex, this.Name, "OnPrintPage1", Log.LogDevices.CON_LOG_DLG);
             }
             Print_PageFooter(ppea, 1, 1);
-            penGrid.Dispose();
             ppea.HasMorePages = false;
         }
 
@@ -696,59 +594,24 @@ namespace KoWordSearch
         {
             Header_Font.Dispose();
             Matrix_Font.Dispose();
+            Matrix_Brush.Dispose();
             Data_Font.Dispose();
+            Data_Brush.Dispose();
+            Grid_Pen.Dispose();
             Footer_Font.Dispose();
         }
 
 
         public void Print_Header(PrintPageEventArgs ppea, SizeF szfRegion)
         {
-            Pen penHeader = new Pen(Color.Black, 1);
-            //Font fntTitle = new Font(this.Font.Name, 16, FontStyle.Bold | FontStyle.Italic);   //GraphicLib.FONTNAME_DEJAVU_SANS_MONO, 16);
-            //Font fntReturnName = new Font(this.Font.Name, 14, FontStyle.Bold);
-            //Font fntReturnAddress = new Font(this.Font.Name, 10, FontStyle.Regular);
-            try
-            {
-                // Draw the Page Border
-                // ppea.Graphics.DrawRectangle(penHeader, Origin_Left, Origin_Top, ppea.MarginBounds.Width, ppea.MarginBounds.Height);
-
-                // Draw the Region_1 Border
-                //ppea.Graphics.DrawRectangle(penHeader, Origin_Left, Origin_Top, ppea.MarginBounds.Width, szfRegion.Height);
-
-                //    string sPackingList = "Packing List";
-                //    SizeF szf1 = ppea.Graphics.MeasureString(sPackingList, fntTitle);
-                //    ppea.Graphics.DrawString(sPackingList, fntTitle, Brushes.Black,
-                //                             Origin_Left + ppea.MarginBounds.Width - szf1.Width - 12.0f, Origin_Top + 4.0f);
-
-                //    string sReturnName = t_Project.DefaultView[0][PackingListDB.C_RETURN_NAME].ToString();
-                //    SizeF szf2 = ppea.Graphics.MeasureString(sReturnName, fntReturnName);
-                //    ppea.Graphics.DrawString(sReturnName, fntReturnName, Brushes.Black,
-                //                             Origin_Left + 20.0f, Origin_Top + 4.0f);
-
-                //    string sReturnAddress = t_Project.DefaultView[0][PackingListDB.C_RETURN_ADDRESS].ToString();
-                //    SizeF szf3 = ppea.Graphics.MeasureString(sReturnAddress, fntReturnAddress);
-                //    ppea.Graphics.DrawString(sReturnAddress, fntReturnAddress, Brushes.Black,
-                //                             Origin_Left + 20.0f, Origin_Top + 4.0f + szf2.Height + 0.8f);
-            }
-            catch (Exception ex)
-            {
-                //Log.Err(ex, this.Name, "Print_Region_1", Log.LogDevices.CON_LOG_DLG);
-            }
-            //fntTitle.Dispose(); fntTitle = null;
-            //fntReturnName.Dispose(); fntReturnName = null;
-            //fntReturnAddress.Dispose(); fntReturnAddress = null;
-            penHeader.Dispose(); 
         }
 
 
-        public void Print_Matrix(PrintPageEventArgs ppea, SizeF szfRegion, float fYpos)
+        public float Print_Matrix(PrintPageEventArgs ppea, SizeF szfRegion, float fYpos)
         {
-            Pen penMatrix = new Pen(Color.Black, 1);
-            Brush brushData = new System.Drawing.SolidBrush(Color.Black);
-            Brush brushFill = new System.Drawing.SolidBrush(Color.Transparent);
             try
             {
-                // Draw the Region_2 Border
+                // Draw the Region Border
                 // ppea.Graphics.DrawRectangle(penMatrix, Origin_Left, fYpos, szfRegion.Width, szfRegion.Height);
 
                 foreach (DataColumn dc in m_MatrixTbl.Columns)
@@ -764,7 +627,7 @@ namespace KoWordSearch
                 for (int rrow = 0; rrow < m_MatrixTbl.Rows.Count; rrow++)
                 {
                     SizeF szfRow =  ReportTools.Print_TableRow(ppea.Graphics, 1.0f, Origin_Left + ((ppea.MarginBounds.Width - rowWidth) / 2.0f), fYpos, rowHeight,
-                                                               Matrix_Font, brushData, brushFill, penMatrix, m_MatrixTbl.DefaultView, rrow);
+                                                               Matrix_Font, Matrix_Brush, Transparent_Brush, Grid_Pen, m_MatrixTbl.DefaultView, rrow);
                     fYpos += szfRow.Height;
                 }
             }
@@ -772,67 +635,42 @@ namespace KoWordSearch
             {
                 //Log.Err(ex, this.Name, "Print_Region_2", Log.LogDevices.CON_LOG_DLG);
             }
-            brushData.Dispose();
-            brushFill.Dispose();
-            penMatrix.Dispose(); 
+            return fYpos;
         }
 
 
-        public void Print_Data(PrintPageEventArgs ppea, SizeF szfRegion, float fXpos, float fYpos)
+        public float Print_Data(PrintPageEventArgs ppea, SizeF szfRegion, float fXpos, float fYpos)
         {
-            Pen penData = new Pen(Color.Black, 1);
-            //Font fontLabel1 = new Font(this.Font.Name, 12, FontStyle.Bold);
-            //Font fontAddress = new Font(this.Font.Name, 12, FontStyle.Regular);
-            //Font fontLabel2 = new Font(this.Font.Name, 11, FontStyle.Bold);   //GraphicLib.FONTNAME_DEJAVU_SANS_MONO, 16);
-            //Font fontNote = new Font(this.Font.Name, 11, FontStyle.Regular);
             try
             {
-                // Draw the Region_3 Border
-                ppea.Graphics.DrawRectangle(penData, fXpos, fYpos, szfRegion.Width, szfRegion.Height);
+                int rowsPerColumn = Convert.ToInt32(Math.Floor(Convert.ToDouble(szfRegion.Height / ((float)Data_Font.Size * 1.7f))));
+                int columnsRequired = Convert.ToInt32(Math.Ceiling(Convert.ToDouble((float)m_VocabTbl.Rows.Count / (float)rowsPerColumn)));
+                float rowHeight = Data_Font.Size * 2.0f;
+                float colWidth = ppea.MarginBounds.Width / ((float)columnsRequired);
 
-            //    string sLabel1 = "Ship To:";
-            //    SizeF szf1 = ppea.Graphics.MeasureString(sLabel1, fontLabel1);
-            //    ppea.Graphics.DrawString(sLabel1, fontLabel1, Brushes.Black,
-            //                             fXpos + 4.0f, fYpos + 8.0f);
-
-            //    string sAddress = t_Project.DefaultView[0][PackingListDB.C_PROJ_SHIP_TO].ToString();
-            //    SizeF szf2 = ppea.Graphics.MeasureString(sAddress, fontAddress);
-            //    ppea.Graphics.DrawString(sAddress, fontAddress, Brushes.Black,
-            //                             fXpos + szf1.Width + 10.0f, fYpos + 8.0f);
-
-            //    // Divider Line
-            //    ppea.Graphics.DrawLine(pen1, fXpos, fYpos + 150.0f, fXpos + szfRegion.Width, fYpos + 150.0f);
-
-            //    SizeF szf3 = ppea.Graphics.MeasureString(PackList_Note, fontNote);
-            //    ppea.Graphics.DrawString(PackList_Note, fontNote, Brushes.Black,
-            //                             fXpos + 8.0f, fYpos + 8.0f);
-
-            //    if ((PackList_Style == Report_Types.RT_PACKLIST_1)
-            //        || (PackList_Style == Report_Types.RT_PACKLIST_2))
-            //    {
-            //        string sPoNbr = "PO #";
-            //        SizeF szf4 = ppea.Graphics.MeasureString(sPoNbr, fontLabel2);
-            //        ppea.Graphics.DrawString(sPoNbr, fontLabel2, Brushes.Black,
-            //                                 fXpos + 8.0f, fYpos + 240.0f);
-
-            //        string sPoBarcode = Barcode.StrToBarcode128(t_Project.DefaultView[0][PackingListDB.C_ORD_PO_NUMBER].ToString().Trim());
-            //        SizeF szf5 = ppea.Graphics.MeasureString(sPoBarcode, Barcode_Font);
-            //        PointF xyLoc = new PointF(fXpos + szf4.Width + 20.0f, fYpos + 240.0f);
-            //        ppea.Graphics.DrawString(sPoBarcode, Barcode_Font, Brushes.Black, xyLoc);
-            //        ppea.Graphics.DrawString(t_Project.DefaultView[0][PackingListDB.C_ORD_PO_NUMBER].ToString().Trim(), BarcodeCap_Font, Brushes.Black,
-            //                                 xyLoc.X + 10.0f, xyLoc.Y + szf5.Height);
-            //    }
-
+                int indexTable = 0;
+                int indexRow = 0;
+                int indexColumn = 0;
+                foreach (DataRowView drv in m_VocabTbl.DefaultView)
+                {
+                    if (indexRow >= rowsPerColumn)
+                    {
+                        indexRow = 0;
+                        indexColumn++;
+                    }
+                    string vocabString = "ㅁ " + drv[MainForm.VOC_ENWORD].ToString();
+                    ppea.Graphics.DrawString(vocabString, Data_Font, Data_Brush,
+                                             Origin_Left + 8.0f + (indexColumn * colWidth),
+                                             fYpos + (indexRow * rowHeight));
+                    indexRow++;
+                    indexTable++;
+                }
             }
             catch (Exception ex)
             {
             //    Log.Err(ex, this.Name, "Print_Region_3", Log.LogDevices.CON_LOG_DLG);
             }
-            //fontLabel1.Dispose(); fontLabel1 = null;
-            //fontAddress.Dispose(); fontAddress = null;
-            //fontNote.Dispose(); fontNote = null;
-            //fontLabel2.Dispose(); fontLabel2 = null;
-            penData.Dispose(); 
+            return fYpos;
         }
 
 

@@ -1,7 +1,6 @@
 ﻿/// <summary>
 /// Korean Word Search Application
-/// To Do:  Add Vocabulary to bottom of printed page
-/// 12/25/2015  Matrix Print Preview Added
+/// 12/25/2015  Print Preview Added
 /// 11/02/2015  Created by //AJ
 /// </summary>
 
@@ -31,9 +30,9 @@ namespace KoWordSearch
 		private BindingSource m_VocabBs = new BindingSource();
 		private DataTable m_VocabTbl = new DataTable("VocabTbl");
 		private string m_VocabFile = Application.StartupPath + @"\Vocabulary\Vocab-0001.txt";
-		private const string VOC_KOWORD = "KoWord";
+		public const string VOC_KOWORD = "KoWord";
 		private const string VOC_KOWORDLEN = "KoWordLen";
-		private const string VOC_ENWORD = "EnWord";
+        public const string VOC_ENWORD = "EnWord";
 		private const string VOC_ENWORDLEN = "EnWordLen";
 		private const string VOC_ORIENT = "Orient";
 		private const string VOC_X = "X";
